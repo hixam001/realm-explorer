@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /players/{playerId} {
+      allow read: if request.auth != null && request.auth.uid == playerId;
+      allow write: if request.auth != null && request.auth.uid == playerId;
+      match /recaps/{runId} {
+        allow read: if request.auth != null && request.auth.uid == playerId;
+        allow write: if false;
+      }
+    }
+    match /runs/{runId} {
+      allow read: if request.auth != null && resource.data.playerId == request.auth.uid;
+      allow create: if request.auth != null && request.resource.data.playerId == request.auth.uid;
+      allow update, delete: if false;
+      match /encounters/{floorId} { allow read: if request.auth != null; allow write: if false; }
+      match /combat/{combatId}    { allow read: if request.auth != null; allow write: if false; }
+      match /loot/{lootId}        { allow read: if request.auth != null; allow write: if false; }
+    }
+  }
+}

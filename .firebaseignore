@@ -1,0 +1,22 @@
+# Files to exclude from ALL Firebase deployments (hosting + functions)
+.git/
+.gitignore
+
+# Dev tools
+node_modules/
+.expo/
+web-build/
+dist/
+
+# Secrets — the functions/.env is intentionally NOT listed here.
+# Firebase CLI uploads functions/.env as part of Cloud Functions deploy.
+# That is the correct, intended behaviour for env var injection.
+# What we DO block is root-level .env (not needed by any Firebase service).
+.env
+
+# Docs and planning — no need to deploy these
+backend/
+README.md
+PRD.md
+Master_Prompt.md
+Deployment_Guide.md

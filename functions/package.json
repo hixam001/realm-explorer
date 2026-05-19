@@ -1,0 +1,22 @@
+{
+  "name": "realm-explorer-functions",
+  "version": "1.0.0",
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "dev": "firebase emulators:start --only functions,firestore",
+    "deploy:key": "firebase functions:config:set gemini.key=\"$(grep GEMINI_API_KEY .env | cut -d '=' -f2)\"",
+    "verify:key": "firebase functions:config:get | grep gemini"
+  },
+  "dependencies": {
+    "firebase-functions": "^4.0.0",
+    "firebase-admin": "^12.0.0",
+    "@google/genai": "^1.0.0",
+    "express": "^4.18.0",
+    "cors": "^2.8.5",
+    "uuid": "^9.0.0",
+    "dotenv": "^16.0.0"
+  }
+}
