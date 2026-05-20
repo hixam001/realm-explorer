@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <!-- ── Icons ──────────────────────────────────────────── -->
+    <link rel="icon" type="image/svg+xml" href="/icon-192.svg" />
+    <link rel="apple-touch-icon" href="/icon-192.svg" />
+
+    <!-- ── Viewport & safe-area (iOS + Android) ───────────── -->
+    <!--
+      viewport-fit=cover: content fills behind the notch/Dynamic Island/status-bar.
+      The app uses env(safe-area-inset-*) in CSS to then pull content back into the safe zone.
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+    <!-- ── PWA / Home-screen install ─────────────────────── -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Android: colours the status bar and address bar -->
+    <meta name="theme-color" content="#050B14" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- iOS: removes Safari chrome when launched from home screen -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!--
+      black-translucent: status bar overlays the app (app content bleeds to top edge).
+      Our pt-safe CSS class then pushes content below the status bar.
+    -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Realm Explorer" />
+
+    <!-- ── SEO ───────────────────────────────────────────── -->
+    <meta name="description" content="Realm Explorer — Agentic AI Dungeon Crawler powered by Gemini. Every encounter, enemy, and story is generated in real time." />
+    <title>Realm Explorer — Agentic Dungeon Crawler</title>
+
+    <!-- ── Fonts ─────────────────────────────────────────── -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

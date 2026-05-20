@@ -1,0 +1,6 @@
+{
+  "name": "Realm Explorer",
+  "description": "An interactive agentic dungeon crawler mockup, simulator, and design system explorer detailing the rich UI screens, transitions, and combat mechanics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

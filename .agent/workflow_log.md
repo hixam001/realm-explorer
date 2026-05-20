@@ -117,3 +117,36 @@
 - Registered POST /api/v1/recap in agentRoutes.js
 **Output:** Recap Agent endpoint operational at POST /api/v1/recap
 **Status:** ✅ Success
+
+---
+
+## 2026-05-20 11:00 — Frontend Chassis Build
+
+**Trigger:** Master Prompt — Build React 18 + Vite + Tailwind v4 + Motion frontend chassis
+**Agent/File:** frontend/ (complete new Vite project)
+**Reasoning:** Built as a standalone Vite project inside `/frontend/` separate from the Expo React Native source. The chassis is a pure presentation layer with simulated delays replacing real API calls, allowing full UI demonstration without backend dependency. Mobile-device emulation chassis (390×780px) wraps all screens in a centered dark container with scanline overlay and notch decoration.
+
+**Architecture Decisions:**
+- `motion/react` for all animations — springs for HP bars, AnimatePresence for screen transitions, useAnimationControls for programmatic shake
+- `displayHp` (hemorrhage lag) tracked separately from `currentHp` in Zustand — `syncDisplayHp()` called 500ms after damage to trigger ghost-bar catch-up
+- `AudioHaptics` Web Audio API synthesizer: tick, click, dodge, heavy, gold, chord, shield — no external audio files needed
+- Play style derivation (`derivePlayStyle`) reads last 8 actions from `actionHistory` — maps dominant style to border/glow color theme globally
+- ActionButton renders 4 style themes: rose (aggressive), cyan (diplomatic), amber (cautious), violet (unpredictable)
+
+**Files Created:**
+- `frontend/vite.config.ts`, `frontend/tsconfig.json`
+- `frontend/src/types.ts` — PlayerClass, CharacterClass, DungeonEncounter, CombatResult, GameItem, RunState, AnimationEvent
+- `frontend/src/data.ts` — CLASSES, MOCK_ENCOUNTERS, MERCHANT_ITEMS, FLOOR_LOOT_ITEMS, PLAY_STYLE_TITLES
+- `frontend/src/audio.ts` — AudioHaptics class
+- `frontend/src/store.ts` — Zustand store with displayHp, combatLog, animQueue, recapText/Title
+- `frontend/src/index.css` — Tailwind v4 + shake, red-flash, gold-pulse, shimmer, scanlines, typewriter-cursor animations
+- `frontend/src/App.tsx` — AnimatePresence router with mobile chassis
+- `frontend/src/components/` — ThinkingPanel, StatBar, ActionButton, ItemCard
+- `frontend/src/screens/` — HomeScreen, ClassSelectScreen, EncounterScreen, MerchantScreen, RecapScreen
+
+**Build Result:**
+- TypeScript: 0 errors
+- Vite build: ✓ 2042 modules, 339KB JS (108KB gzip), 4.3s
+- Dev server: http://localhost:5173/
+
+**Status:** ✅ Success
