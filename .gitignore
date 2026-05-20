@@ -11,3 +11,7 @@ dist/
 *.mobileprovision
 *.orig.*
 web-build/
+
+# Android Keystores
+android-keystore/
+*.keystore
