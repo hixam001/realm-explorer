@@ -42,7 +42,7 @@ export function ItemCard({ item, onBuy, canAfford = true, showBuy = false, index
         <div className="mb-3 flex items-start justify-between gap-3">
           <h3 className="text-sm font-bold leading-tight text-white">{item.itemName}</h3>
           <div
-            className="flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[9px] font-bold uppercase tracking-wider"
+            className="flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 font-mono text-[9px] font-bold uppercase tracking-wider"
             style={{ background: cfg.bg, borderColor: cfg.border, color: cfg.color }}
           >
             {cfg.icon}
@@ -65,7 +65,7 @@ export function ItemCard({ item, onBuy, canAfford = true, showBuy = false, index
       {/* Buy row */}
       {showBuy && (
         <div
-          className="flex items-center justify-between gap-3 border-t border-slate-800/60 px-4 py-3"
+          className="flex items-center justify-between gap-4 border-t border-slate-800/60 px-5 py-5"
           style={{ background: 'rgba(15,23,42,0.4)' }}
         >
           <div className="flex items-center gap-1.5">
@@ -76,14 +76,14 @@ export function ItemCard({ item, onBuy, canAfford = true, showBuy = false, index
             whileTap={{ scale: 0.93 }}
             onClick={() => { if (canAfford) { audioHaptics.gold(); onBuy?.(); } }}
             disabled={!canAfford}
-            className="rounded-xl px-4 py-2 text-xs font-bold disabled:cursor-not-allowed disabled:opacity-30"
+            className="rounded-xl px-8 py-5 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-30"
             style={{
               background:  canAfford ? 'linear-gradient(135deg, #d97706, #fbbf24)' : 'rgba(30,41,59,0.6)',
               color:       canAfford ? '#1c1917' : '#64748b',
               boxShadow:   canAfford ? '0 0 14px rgba(251,191,36,0.3)' : 'none',
             }}
           >
-            {canAfford ? 'BUY' : 'Need more gold'}
+            {canAfford ? 'BUY' : 'Not enough gold'}
           </motion.button>
         </div>
       )}

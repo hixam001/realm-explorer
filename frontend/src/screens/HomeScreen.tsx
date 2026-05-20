@@ -1,12 +1,20 @@
 import React, { useEffect } from 'react';
 import { Swords, Hexagon, Clock, Trophy, Zap, Star, ChevronRight } from 'lucide-react';
 import { useGameStore } from '../store';
-import { DEFAULT_PROFILE } from '../data';
 import { audioHaptics } from '../audio';
+import { loadProfile } from '../profileStorage';
 
 export function HomeScreen() {
   const { setActiveScreen, setProfile, resetRun, profile } = useGameStore();
-  useEffect(() => { resetRun(); setProfile(DEFAULT_PROFILE); }, []);
+
+  useEffect(() => {
+    resetRun();
+    // Load the real persisted profile on every visit to HomeScreen
+    const saved = loadProfile();
+    setProfile(saved);
+  }, []);
+
+  const isFirstRun = (profile?.runsCompleted ?? 0) === 0;
 
   return (
     <div className="flex-1 bg-[#090F16] flex flex-col items-center justify-center p-6 pt-safe pb-10 text-white relative overflow-hidden">
@@ -40,40 +48,55 @@ export function HomeScreen() {
             </div>
             <div className="flex items-center space-x-1">
               <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full shadow-[0_0_5px_rgba(16,185,129,0.5)]" />
-              <span className="font-mono text-[10px] text-emerald-500">ACTIVE</span>
+              <span className="font-mono text-[10px] text-emerald-500">
+                {isFirstRun ? 'NEW' : 'ACTIVE'}
+              </span>
             </div>
           </div>
 
-          {/* Stats grid */}
-          <div className="grid grid-cols-3 divide-x divide-[#1E293B] text-center p-3">
-            <div className="flex flex-col items-center">
-              <Clock className="w-4 h-4 text-gray-500 mb-1" />
-              <div className="font-bold text-lg mb-0.5">{profile?.runsCompleted ?? 3}</div>
-              <div className="font-mono text-[9px] text-[#475569]">RUNS</div>
+          {isFirstRun ? (
+            /* ── First-time user: no stats yet ── */
+            <div className="px-4 py-5 text-center">
+              <p className="text-[#475569] font-mono text-[11px] leading-relaxed">
+                No runs yet. Complete a run to<br />build your explorer profile.
+              </p>
             </div>
-            <div className="flex flex-col items-center">
-              <Trophy className="w-4 h-4 text-gray-500 mb-1" />
-              <div className="font-bold text-lg mb-0.5">{profile?.bestDepth ?? 4}/5</div>
-              <div className="font-mono text-[9px] text-[#475569]">BEST DEPTH</div>
-            </div>
-            <div className="flex flex-col items-center">
-              <Zap className="w-4 h-4 text-gray-500 mb-1" />
-              <div className="font-bold text-lg mb-0.5">{profile?.averageStyle ?? 'aggres'}</div>
-              <div className="font-mono text-[9px] text-[#475569]">STYLE</div>
-            </div>
-          </div>
-
-          {/* Earned titles */}
-          <div className="px-3 pb-3">
-            <div className="font-mono text-[9px] text-[#475569] mb-1.5">EARNED TITLES</div>
-            <div className="flex flex-wrap gap-1.5">
-              {(profile?.allTimeTitles ?? ['The Iron Warlord', 'The Principled Dancer']).map(t => (
-                <div key={t} className="flex items-center space-x-1 border border-cyan-900/50 bg-cyan-950/20 text-cyan-300 text-[10px] px-2 py-1 rounded-full">
-                  <Star className="w-3 h-3 text-cyan-500" /> <span>{t}</span>
+          ) : (
+            <>
+              {/* Stats grid */}
+              <div className="grid grid-cols-3 divide-x divide-[#1E293B] text-center p-3">
+                <div className="flex flex-col items-center">
+                  <Clock className="w-4 h-4 text-gray-500 mb-1" />
+                  <div className="font-bold text-lg mb-0.5">{profile!.runsCompleted}</div>
+                  <div className="font-mono text-[9px] text-[#475569]">RUNS</div>
                 </div>
-              ))}
-            </div>
-          </div>
+                <div className="flex flex-col items-center">
+                  <Trophy className="w-4 h-4 text-gray-500 mb-1" />
+                  <div className="font-bold text-lg mb-0.5">{profile!.bestDepth}</div>
+                  <div className="font-mono text-[9px] text-[#475569]">BEST DEPTH</div>
+                </div>
+                <div className="flex flex-col items-center">
+                  <Zap className="w-4 h-4 text-gray-500 mb-1" />
+                  <div className="font-bold text-lg mb-0.5">{profile!.averageStyle}</div>
+                  <div className="font-mono text-[9px] text-[#475569]">STYLE</div>
+                </div>
+              </div>
+
+              {/* Earned titles */}
+              {profile!.allTimeTitles.length > 0 && (
+                <div className="px-3 pb-3">
+                  <div className="font-mono text-[9px] text-[#475569] mb-1.5">EARNED TITLES</div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {profile!.allTimeTitles.map(t => (
+                      <div key={t} className="flex items-center space-x-1 border border-cyan-900/50 bg-cyan-950/20 text-cyan-300 text-[10px] px-2 py-1 rounded-full">
+                        <Star className="w-3 h-3 text-cyan-500" /> <span>{t}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         {/* Powered by */}
@@ -85,8 +108,8 @@ export function HomeScreen() {
         {/* CTA */}
         <button
           onClick={() => { audioHaptics.click(); setActiveScreen('classSelect'); }}
-          className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white rounded-full py-3.5 flex justify-center items-center font-bold text-sm shadow-lg mb-3 transition-all">
-          <Swords className="w-4 h-4 mr-2" /> Enter the Dungeon <ChevronRight className="w-4 h-4 ml-1" />
+          className="w-full bg-gradient-to-r from-cyan-600 to-cyan-500 hover:from-cyan-500 hover:to-cyan-400 text-white rounded-2xl py-5 px-8 flex justify-center items-center gap-2 font-bold text-sm shadow-lg mb-3 transition-all">
+          <Swords className="w-4 h-4" /> {isFirstRun ? 'Start Your First Run' : 'Enter the Dungeon'} <ChevronRight className="w-4 h-4" />
         </button>
         <div className="text-[10px] font-mono text-[#334155] tracking-wider text-center">
           AI-powered · Every run is unique · 5 floors deep
